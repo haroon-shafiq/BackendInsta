@@ -1,0 +1,80 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id         String    @id @default(uuid())
+  userName   String
+  email      String    @unique
+  password   String?
+  avatarUrl  String?
+  provider   String    @default("credentials")
+  providerId String?   @unique
+  followers  Follow[]  @relation("following")
+  following  Follow[]  @relation("follower")
+  post       Post[]
+  comment    Comment[]
+  like       Like[]
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@index([email])
+  @@index([provider, providerId])
+}
+
+model Follow {
+  id          String   @id @default(uuid())
+  followerId  String
+  followingId String
+  follower    User     @relation("follower", fields: [followerId], references: [id])
+  following   User     @relation("following", fields: [followingId], references: [id])
+  createdAt   DateTime @default(now())
+
+  @@unique([followerId, followingId])
+}
+
+model Post {
+  id          String    @id @default(uuid())
+  description String?
+  imageUrl    String
+  authorId    String
+  author      User      @relation(fields: [authorId], references: [id])
+  comments    Comment[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now())
+}
+
+model Comment {
+  id        String    @id @default(uuid())
+  content   String
+  postId    String
+  authorId  String
+  parentId  String?
+  post      Post      @relation(fields: [postId], references: [id])
+  author    User      @relation(fields: [authorId], references: [id])
+  parent    Comment?  @relation("CommentToReplies", fields: [parentId], references: [id])
+  repliesTo Comment[] @relation("CommentToReplies")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Like {
+  id        String   @id @default(uuid())
+  userId    String
+  classId   String
+  classType String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([userId, classId])
+}
