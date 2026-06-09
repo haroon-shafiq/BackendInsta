@@ -10,13 +10,18 @@ export const createLike = async (userId: string, data: CreateLikeData) => {
                 classId: data.classId
             }
         },
+
         update: {},
         create: {
             userId,
             classId: data.classId,
             classType: data.classType
+        },
+        include: {
+            user: { select: userSelect }
         }
     });
+
     return like;
 };
 

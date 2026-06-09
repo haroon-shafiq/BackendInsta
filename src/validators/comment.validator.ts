@@ -1,4 +1,4 @@
-import { body } from "express-validator";
+import { body, query } from "express-validator";
 const createCommentValidator = [
     body("content")
         .trim()
@@ -12,7 +12,7 @@ const createCommentValidator = [
         .notEmpty().withMessage("Parent ID is required")
 ]
 const getCommentsValidator = [
-    body("postId")
+    query("postId")
         .trim()
         .notEmpty().withMessage("Post ID is required")
 ]

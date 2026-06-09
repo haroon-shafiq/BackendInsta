@@ -9,6 +9,11 @@ export const createComment = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const getCommentsByPostId = catchAsync(async (req: Request, res: Response) => {
-    const comments = await CommentService.getCommentsByPostId(req.body.postId);
+    const comments = await CommentService.getCommentsByPostId(req.query.postId as string);
     sendSucess(res, 200, "Comments fetched successfully", comments);
+});
+
+export const getRepliesByParentId = catchAsync(async (req: Request, res: Response) => {
+    const comments = await CommentService.getRepliesByParentId(req.params.id as string);
+    sendSucess(res, 200, "Replies fetched successfully", comments);
 });

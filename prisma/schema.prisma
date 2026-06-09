@@ -13,20 +13,21 @@ datasource db {
 }
 
 model User {
-  id         String    @id @default(uuid())
-  userName   String
-  email      String    @unique
-  password   String?
-  avatarUrl  String?
-  provider   String    @default("credentials")
-  providerId String?   @unique
-  followers  Follow[]  @relation("following")
-  following  Follow[]  @relation("follower")
-  post       Post[]
-  comment    Comment[]
-  like       Like[]
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
+  id          String    @id @default(uuid())
+  userName    String
+  email       String    @unique
+  password    String?
+  avatarUrl   String?
+  provider    String    @default("credentials")
+  providerId  String?   @unique
+  followers   Follow[]  @relation("following")
+  following   Follow[]  @relation("follower")
+  post        Post[]
+  comment     Comment[] @relation("AuthorComments")
+  mentionedIn Comment[] @relation("ReplyToUser")
+  like        Like[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
   @@index([email])
   @@index([provider, providerId])
@@ -55,17 +56,25 @@ model Post {
 }
 
 model Comment {
-  id        String    @id @default(uuid())
-  content   String
-  postId    String
-  authorId  String
-  parentId  String?
-  post      Post      @relation(fields: [postId], references: [id])
-  author    User      @relation(fields: [authorId], references: [id])
-  parent    Comment?  @relation("CommentToReplies", fields: [parentId], references: [id])
-  repliesTo Comment[] @relation("CommentToReplies")
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id               String  @id @default(uuid())
+  content          String
+  postId           String
+  authorId         String
+  parentId         String?
+  replyToUserId    String?
+  replyToCommentId String?
+
+  post        Post      @relation(fields: [postId], references: [id])
+  author      User      @relation("AuthorComments", fields: [authorId], references: [id])
+  parent      Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
+  replies     Comment[] @relation("CommentReplies")
+  replyToUser User?     @relation("ReplyToUser", fields: [replyToUserId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([postId])
+  @@index([parentId])
 }
 
 model Like {

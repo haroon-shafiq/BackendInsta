@@ -7,3 +7,8 @@ export const likeValidator = [
         .trim()
         .notEmpty().withMessage("Class Type is required")
 ]
+export const deleteLikeValidator = [
+    body("classId")
+        .trim()
+        .notEmpty().withMessage("Class ID is required")
+]

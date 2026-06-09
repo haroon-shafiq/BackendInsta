@@ -3,6 +3,7 @@ import { createPostInput, updatePostInput } from "../types/post.type";
 import { userSelect } from "../constants/selectors";
 
 export const createPost = async (userId: string, data: createPostInput) => {
+    console.log("Data", data, userId)
     const post = await prisma.post.create({
         data: {
             authorId: userId,
@@ -16,6 +17,22 @@ export const getUserPosts = async (userId: string) => {
     const posts = await prisma.post.findMany({
         where: {
             authorId: userId
+        },
+        orderBy: {
+            createdAt: "desc"
+        },
+        include: {
+            author: {
+                select: userSelect,
+            }
+        }
+    })
+    return posts;
+}
+export const getAllPosts = async (userId: string) => {
+    const posts = await prisma.post.findMany({
+        where: {
+            authorId: { not: userId }
         },
         orderBy: {
             createdAt: "desc"

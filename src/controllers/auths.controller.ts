@@ -1,9 +1,7 @@
-import { authLogin } from './../services/auths.service';
 import * as AuthSerivce from "../services/auths.service"
 import { NextFunction, Request, Response } from "express"
 import { catchAsync } from "../utils/catchAsync"
 import { sendSucess } from '../utils/response';
-import { uploadToCloudinary } from "../services/uploads.service";
 import { authPayload } from '../types/auth.type';
 export const register = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const userData = { ...req.body }

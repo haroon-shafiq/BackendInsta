@@ -21,6 +21,7 @@ export const checkAuth = catchAsync(async (req, res, next) => {
         req.user = payload;
         next();
     } catch (error) {
+        if (error instanceof AppError) throw error;
         throw new AppError(401, "Invalid Token");
     }
 });

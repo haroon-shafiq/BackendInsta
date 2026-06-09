@@ -7,4 +7,5 @@ const router = Router();
 router.use(checkAuth)
 router.post('/', createCommentValidator, validate, CommentController.createComment)
 router.get('/', getCommentsValidator, validate, CommentController.getCommentsByPostId)
+router.get('/:id/replies', CommentController.getRepliesByParentId)
 export default router

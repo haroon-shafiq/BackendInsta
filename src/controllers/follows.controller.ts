@@ -4,6 +4,7 @@ import { catchAsync } from "../utils/catchAsync";
 import { sendSucess } from "../utils/response";
 import { AppError } from "../utils/appError";
 export const followUser = catchAsync(async (req: Request, res: Response) => {
+    console.log("Request Hit", req.body.followingId)
     const result = await FollowService.followUser(req.user.id, req.body.followingId);
     sendSucess(res, 201, 'User Followed Successfully', result);
 })
@@ -22,6 +23,7 @@ export const getFollowings = catchAsync(async (req: Request, res: Response, next
     sendSucess(res, 200, "User followings fetched successfully", followings);
 })
 export const unFollowUser = catchAsync(async (req: Request, res: Response) => {
+    console.log("Hello in unfolow", req.body?.followingId, req.user.id);
     const result = await FollowService.unfollow(req.user.id, req.body.followingId);
     sendSucess(res, 200, "User unfollowed successfully", result);
 })
