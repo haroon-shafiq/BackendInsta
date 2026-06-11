@@ -5,6 +5,7 @@ import postRoutes from "./post.route"
 import commentRoutes from "./comment.route"
 import likeRoutes from "../routes/like.route";
 import userRoutes from "../routes/user.route"
+import notificationRoutes from "../routes/notification.route"
 import { errorHandlder } from "../middleware/error.middleware";
 const router = Router();
 router.use("/v1/auth", authRoutes)
@@ -13,7 +14,8 @@ router.use("/v1/posts", postRoutes)
 router.use("/v1/comments", commentRoutes)
 router.use("/v1/likes", likeRoutes)
 router.use("/v1/users", userRoutes)
+router.use("/v1/notifications", notificationRoutes);
 
 router.use(errorHandlder)
 
-export default router;
+export default router; 

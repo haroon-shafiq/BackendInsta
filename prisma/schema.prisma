@@ -13,21 +13,23 @@ datasource db {
 }
 
 model User {
-  id          String    @id @default(uuid())
-  userName    String
-  email       String    @unique
-  password    String?
-  avatarUrl   String?
-  provider    String    @default("credentials")
-  providerId  String?   @unique
-  followers   Follow[]  @relation("following")
-  following   Follow[]  @relation("follower")
-  post        Post[]
-  comment     Comment[] @relation("AuthorComments")
-  mentionedIn Comment[] @relation("ReplyToUser")
-  like        Like[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id                    String         @id @default(uuid())
+  userName              String
+  email                 String         @unique
+  password              String?
+  avatarUrl             String?
+  provider              String         @default("credentials")
+  providerId            String?        @unique
+  followers             Follow[]       @relation("following")
+  following             Follow[]       @relation("follower")
+  post                  Post[]
+  comment               Comment[]      @relation("AuthorComments")
+  mentionedIn           Comment[]      @relation("ReplyToUser")
+  like                  Like[]
+  createdAt             DateTime       @default(now())
+  updatedAt             DateTime       @updatedAt
+  receivedNotifications Notification[] @relation("NotificationRecipient")
+  sentNotifications     Notification[] @relation("NotificationAuthor")
 
   @@index([email])
   @@index([provider, providerId])
@@ -86,4 +88,18 @@ model Like {
   user      User     @relation(fields: [userId], references: [id])
 
   @@unique([userId, classId])
+}
+
+model Notification {
+  id          String   @id @default(uuid())
+  recipientId String
+  authorId    String
+  action      String
+  entityId    String
+  entityType  String
+  recipient   User     @relation("NotificationRecipient", fields: [recipientId], references: [id])
+  author      User     @relation("NotificationAuthor", fields: [authorId], references: [id])
+  createdAt   DateTime @default(now())
+
+  @@index([recipientId])
 }

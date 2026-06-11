@@ -1,3 +1,4 @@
+
 import { prisma } from "../config/db.config"
 import { createPostInput, updatePostInput } from "../types/post.type";
 import { userSelect } from "../constants/selectors";
@@ -56,5 +57,16 @@ export const updateUserPost = async (userId: string, data: updatePostInput, post
             imageUrl: data.imageUrl
         }
     })
+    return post;
+}
+export const findPostOwner = async (postId: string) => {
+    const post = await prisma.post.findUnique({
+        where: {
+            id: postId
+        },
+        select: {
+            authorId: true
+        }
+    });
     return post;
 }

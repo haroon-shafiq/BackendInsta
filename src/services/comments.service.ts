@@ -9,7 +9,7 @@ export const createComment = async (data: CreateCommentData, userId: string) => 
     let replyToComment = null;
 
     if (data.parentId) {
-        const target = await prisma.comment.findUnique({
+        const targetComment = await prisma.comment.findUnique({
             where: { id: data.parentId },
             select: {
                 id: true,
@@ -20,15 +20,15 @@ export const createComment = async (data: CreateCommentData, userId: string) => 
             }
         });
 
-        if (!target) throw new Error("Target comment not found");
+        if (!targetComment) throw new Error("Target comment not found");
 
         replyToCommentId = data.parentId;
-        parentId = target.parentId ?? data.parentId;
-        replyToUserId = target.authorId;
+        parentId = targetComment.parentId ?? data.parentId;
+        replyToUserId = targetComment.authorId;
 
         replyToComment = {
-            content: target.content,
-            author: target.author
+            content: targetComment.content,
+            author: targetComment.author
         };
     }
 
@@ -49,6 +49,7 @@ export const createComment = async (data: CreateCommentData, userId: string) => 
 
     return { ...comment, replyToComment };
 };
+
 
 export const getCommentsByPostId = async (postId: string) => {
     return await prisma.comment.findMany({
@@ -93,4 +94,10 @@ export const getRepliesByParentId = async (parentId: string) => {
         });
     }
     return formattedReplies;
+};
+export const findCommentOwner = async (commentId: string) => {
+    return await prisma.comment.findUnique({
+        where: { id: commentId },
+        select: { authorId: true }
+    });
 };

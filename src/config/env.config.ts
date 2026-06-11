@@ -9,4 +9,5 @@ export const env = {
     API_KEY: process.env.API_KEY,
     API_SECRET: process.env.API_SECRET,
     JWT_ACCESS_SECRET: process.env.JWT_ACCESS_SECRET,
+    FRONTEND_URL: process.env.FRONTEND_URL
 }
