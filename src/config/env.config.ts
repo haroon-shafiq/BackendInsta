@@ -9,5 +9,9 @@ export const env = {
     API_KEY: process.env.API_KEY,
     API_SECRET: process.env.API_SECRET,
     JWT_ACCESS_SECRET: process.env.JWT_ACCESS_SECRET,
-    FRONTEND_URL: process.env.FRONTEND_URL
+    FRONTEND_URL: process.env.FRONTEND_URL,
+    WHATSAPP_TOKEN: process.env.WHATSAPP_TOKEN,
+    PHONE_NUMBER_ID: process.env.PHONE_NUMBER_ID,
+    WHATSAPP_VERIFY_TOKEN: process.env.WHATSAPP_VERIFY_TOKEN,
+    GROQ_API_KEY: process.env.GROQ_API_KEY
 }
